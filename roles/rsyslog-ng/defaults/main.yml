@@ -2,10 +2,9 @@
     # defaults file for docker
     nos_master_auditoria:
           - { ip: 192.168.100.10, name: auditoria }
-          - { ip: 192.168.100.11, name: auditoria_slave }
+         # - { ip: 192.168.100.20, name: auditoria_slave }
 
     nodes_auditados:
-      - { ip: 192.168.100.20, name: jenkins }
-      - { ip: 192.168.100.30, name: gitlab-ce }
-
+      - { ip: 192.168.100.40, name: jenkins }
+      - { ip: 192.168.100.50, name: gitlab-ce }
 

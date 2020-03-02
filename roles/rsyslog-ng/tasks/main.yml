@@ -2,11 +2,49 @@
 
   - name: instalando o pacote rsyslog-ng
     apt:
-      name: syslog-ng
-      state: present
+     name: syslog-ng
+     state: present
     with_items:
          - "{{ nos_master_auditoria }}"
-   # when: ansible_hostname in item.name
+    when: ansible_hostname in item.name
 
-  - debug:
-      msg: "{{ nos_master_auditoria }}"
+  - name: Copiando arquivo de configuração syslog-ng.conf ao servidor de auditoria
+    copy: src=syslog-ng.conf dest=/etc/syslog-ng
+    with_items:
+         - "{{ nos_master_auditoria }}"
+    when: ansible_hostname in item.name
+
+  - name: Copiando arquivo de configuração rsyslog.conf aos nodes auditados
+    copy: src=rsyslog.conf dest=/etc
+    with_items:
+         - "{{ nodes_auditados }}"
+    when: ansible_hostname in item.name
+
+  - debug: msg="Reiniciando o serviço rsyslog-ng"
+    notify:
+        - reiniciar rsyslog-ng
+    with_items:
+         - "{{ nos_master_auditoria }}"
+    when: ansible_hostname in item.name
+
+  - debug: msg="Reiniciando o serviço syslog"
+    notify:
+        - reiniciar syslog
+    with_items:
+         - "{{ nos_master_auditoria }}"
+    when: ansible_hostname in item.name
+
+  - name: Exibindo node Master
+    debug:
+      msg: "Nó Master: {{ ansible_hostname }}"
+    with_items:
+         - "{{ nos_master_auditoria }}"
+    when: ansible_hostname in item.name
+
+  - name: Exibindo nodes auditados
+    debug:
+      msg: "Nó Auditados: {{ ansible_hostname }}"
+    with_items:
+         - "{{ nodes_auditados }}"
+    when: ansible_hostname in item.name
+
