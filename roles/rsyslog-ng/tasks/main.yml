@@ -20,31 +20,41 @@
          - "{{ nodes_auditados }}"
     when: ansible_hostname in item.name
 
-  - debug: msg="Reiniciando o serviço rsyslog-ng"
+  - debug: msg="Reiniciando o serviço syslog-ng"
     notify:
-        - reiniciar rsyslog-ng
+       - reiniciar syslog-ng
     with_items:
          - "{{ nos_master_auditoria }}"
     when: ansible_hostname in item.name
 
-  - debug: msg="Reiniciando o serviço syslog"
+  - debug: msg="Reiniciando o serviço rsyslog"
     notify:
-        - reiniciar syslog
-    with_items:
-         - "{{ nos_master_auditoria }}"
-    when: ansible_hostname in item.name
-
-  - name: Exibindo node Master
-    debug:
-      msg: "Nó Master: {{ ansible_hostname }}"
-    with_items:
-         - "{{ nos_master_auditoria }}"
-    when: ansible_hostname in item.name
-
-  - name: Exibindo nodes auditados
-    debug:
-      msg: "Nó Auditados: {{ ansible_hostname }}"
+       - reiniciar rsyslog
     with_items:
          - "{{ nodes_auditados }}"
     when: ansible_hostname in item.name
+
+  #- name: reiniciar rsyslog
+    #systemd:
+     #     name: rsyslog
+      #    daemon_reload: yes
+       #   state: restarted
+        #  enabled: yes
+    #with_items:
+     #    - "{{ nodes_auditados }}"
+    #when: ansible_hostname in item.name
+
+#  - name: Exibindo node Master
+    #debug:
+      #msg: "Nó Master: {{ ansible_hostname }}"
+    #with_items:
+         #- "{{ nos_master_auditoria }}"
+    #when: ansible_hostname in item.name
+
+  #- name: Exibindo nodes auditados
+    #debug:
+      #msg: "Nó Auditados: {{ ansible_hostname }}"
+    #with_items:
+         #- "{{ nodes_auditados }}"
+    #when: ansible_hostname in item.name
 
